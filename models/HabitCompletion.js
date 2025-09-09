@@ -6,6 +6,17 @@ const HabitCompletionSchema = new mongoose.Schema({
     ref: 'Habit',
     required: true,
   },
+  // --- THESE FIELDS MUST BE ADDED ---
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  habitName: {
+    type: String,
+    required: true,
+  },
+  // ------------------------------------
   date: {
     type: Date,
     required: true,

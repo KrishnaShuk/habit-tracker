@@ -5,13 +5,18 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const handleModeToggle = () => {
+    setUsername('');
     setEmail('');
     setPassword('');
     setError(null);
@@ -22,45 +27,90 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
 
-    try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Something went wrong');
-      router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+    // --- FIX FOR PROBLEM 1 (NO REDIRECT) ---
+    if (mode === 'signup') {
+      // --- SIGN UP LOGIC ---
+      try {
+        // Step 1: Register the user
+        const regRes = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password }),
+        });
+        const regData = await regRes.json();
+        if (!regRes.ok) throw new Error(regData.error || 'Failed to create account');
+
+        // Step 2: If registration is successful, automatically log them in
+        const loginRes = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const loginData = await loginRes.json();
+        if (!loginRes.ok) throw new Error(loginData.error || 'Failed to log in after sign up');
+
+        // Step 3: Redirect to dashboard
+        router.push('/dashboard');
+
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      // --- LOGIN LOGIC (remains the same) ---
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Invalid credentials');
+        
+        router.push('/dashboard');
+
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   return (
+    // --- FIX FOR PROBLEM 2 (MISSING DOTS) ---
+    // Removed 'bg-background'. The 'min-h-screen' and flex properties are enough.
+    // The body's background pattern from globals.css will now show through.
     <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-16">
-      {/* 1. LARGER HEADING & MORE SPACE */}
+      
       <div className="text-center">
-        <h1 className="text-7xl font-bold text-foreground">
-          Welcome to Habit Track
-        </h1>
-        <p className="text-muted mt-3">
-          Sign in or create an account to start building better habits.
-        </p>
+        <h1 className="text-5xl font-bold text-foreground">Welcome to Habit Track</h1>
+        <p className="text-muted mt-3">Sign in or create an account to start building better habits.</p>
       </div>
 
-      {/* 2. THE GUMROAD CARD WITH SOLID SHADOW */}
-      <div className="card w-full max-w-sm p-8 space-y-11 shadow-solid">
+      <div className="card w-full max-w-sm p-8 space-y-8 shadow-solid">
         <div className="text-center">
-          <h2 className="text-3xl font-semibold">
-            {mode === 'login' ? 'Log In' : 'Create Account'}
-          </h2>
+          <h2 className="text-3xl font-semibold">{mode === 'login' ? 'Log In' : 'Create Account'}</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {mode === 'signup' && (
+            <div>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                required
+                className="input-base text-lg"
+              />
+            </div>
+          )}
+
           <div>
             <input
               id="email"
