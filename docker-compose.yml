@@ -1,0 +1,9 @@
+services:
+  habit-tracker-app:
+    build: .
+    container_name: habit-tracker
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: unless-stopped
