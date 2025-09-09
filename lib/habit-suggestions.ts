@@ -1,11 +1,7 @@
-// Define the shape of a single category detail
 interface CategoryDetail {
   icon: string;
   color: string;
 }
-
-// Define the shape of our map: A dictionary where keys are strings
-// and values are CategoryDetail objects.
 interface CategoryDetailsMap {
   [key: string]: CategoryDetail;
 }
@@ -43,8 +39,7 @@ export const habitCategories = [
   },
 ];
 
-// We explicitly tell TypeScript the type of our map
 export const categoryDetailsMap: CategoryDetailsMap = habitCategories.reduce((acc, category) => {
   acc[category.name] = { icon: category.icon, color: category.color };
   return acc;
-}, {} as CategoryDetailsMap); // Initialize with the correct type
+}, {} as CategoryDetailsMap); 

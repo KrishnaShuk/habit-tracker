@@ -6,17 +6,12 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
   try {
     await dbConnect();
-
-    // Now expecting 'username' in the request body
     const { username, email, password } = await request.json();
 
     if (!username || !email || !password) {
       return NextResponse.json({ error: 'Username, email, and password are required' }, { status: 400 });
     }
 
-    // You can add more specific validation here if you like
-
-    // Check if email OR username already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       if (existingUser.email === email) {
@@ -30,7 +25,7 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     await User.create({
-      username, // Save the new username
+      username, 
       email,
       password: hashedPassword,
     });
@@ -38,7 +33,6 @@ export async function POST(request) {
     return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
 
   } catch (error) {
-    // Handle potential validation errors from the schema
     if (error.name === 'ValidationError') {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

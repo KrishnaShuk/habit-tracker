@@ -6,7 +6,7 @@ const HabitSchema = new mongoose.Schema({
     required: [true, 'Please provide a name for the habit.'],
     trim: true,
   },
-  frequency: { // <-- THIS IS THE FIELD TO CHECK
+  frequency: { 
     type: String,
     enum: ['daily', 'weekly'],
     required: true,

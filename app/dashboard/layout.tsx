@@ -1,4 +1,4 @@
-import Sidebar from '@/components/Sidebar'; // We will create this next
+import Sidebar from '@/components/Sidebar'; 
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

@@ -15,9 +15,7 @@ function getUserIdFromToken() {
   }
 }
 
-// --- POST (Follow a user) ---
 export async function POST(request, { params }) {
-  // The 'params' object is automatically available here
   const { userId: userIdToFollow } = params;
 
   try {

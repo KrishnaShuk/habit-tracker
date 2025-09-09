@@ -28,11 +28,9 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    // --- FIX FOR PROBLEM 1 (NO REDIRECT) ---
     if (mode === 'signup') {
-      // --- SIGN UP LOGIC ---
       try {
-        // Step 1: Register the user
+      
         const regRes = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -41,7 +39,7 @@ export default function LoginPage() {
         const regData = await regRes.json();
         if (!regRes.ok) throw new Error(regData.error || 'Failed to create account');
 
-        // Step 2: If registration is successful, automatically log them in
+       
         const loginRes = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -50,7 +48,6 @@ export default function LoginPage() {
         const loginData = await loginRes.json();
         if (!loginRes.ok) throw new Error(loginData.error || 'Failed to log in after sign up');
 
-        // Step 3: Redirect to dashboard
         router.push('/dashboard');
 
       } catch (err: any) {
@@ -59,7 +56,7 @@ export default function LoginPage() {
         setIsLoading(false);
       }
     } else {
-      // --- LOGIN LOGIC (remains the same) ---
+
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
@@ -80,9 +77,7 @@ export default function LoginPage() {
   };
 
   return (
-    // --- FIX FOR PROBLEM 2 (MISSING DOTS) ---
-    // Removed 'bg-background'. The 'min-h-screen' and flex properties are enough.
-    // The body's background pattern from globals.css will now show through.
+
     <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-16">
       
       <div className="text-center">

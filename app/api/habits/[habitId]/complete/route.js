@@ -16,7 +16,6 @@ function getUserIdFromToken() {
   }
 }
 
-// --- POST (Mark habit as complete) ---
 export async function POST(request, { params }) {
   try {
     const userId = getUserIdFromToken();
@@ -38,7 +37,6 @@ export async function POST(request, { params }) {
     if (existingCompletion) {
       return NextResponse.json({ error: 'Habit already completed today' }, { status: 409 });
     }
-    // This part is now correct and will work with the updated model
     const completion = await HabitCompletion.create({
       habitId: habitId,
       date: new Date(),

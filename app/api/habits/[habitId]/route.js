@@ -16,7 +16,6 @@ function getUserIdFromToken() {
   }
 }
 
-// --- PUT (Update) a specific habit ---
 export async function PUT(request, { params }) {
   try {
     const userId = getUserIdFromToken();
@@ -47,10 +46,8 @@ export async function PUT(request, { params }) {
   }
 }
 
-// --- DELETE a specific habit ---
 export async function DELETE(request, { params }) {
   try {
-    // THIS LINE IS NOW CORRECTED
     const userId = getUserIdFromToken();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -59,16 +56,12 @@ export async function DELETE(request, { params }) {
     const { habitId } = params;
     await dbConnect();
 
-    // First, verify the habit exists and belongs to the user
     const habitToDelete = await Habit.findOne({ _id: habitId, userId: userId });
     if (!habitToDelete) {
       return NextResponse.json({ error: 'Habit not found or access denied' }, { status: 404 });
     }
-
-    // Delete all completions associated with this habit
     await HabitCompletion.deleteMany({ habitId: habitId });
 
-    // Delete the habit itself
     await Habit.findByIdAndDelete(habitId);
 
     return NextResponse.json({ message: 'Habit deleted successfully' }, { status: 200 });

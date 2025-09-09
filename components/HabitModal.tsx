@@ -1,11 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// THIS IS THE CORRECTED IMPORT. We let the resolver find the .ts file.
 import { habitCategories } from '@/lib/habit-suggestions'; 
 import { Habit } from './HabitItem';
-
-// ... (The rest of the file is identical to the last version and is correct)
 
 interface HabitModalProps {
   isOpen: boolean;

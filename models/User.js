@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide a password.'],
     select: false,
   },
-  // --- NEW SOCIAL FIELDS ---
   following: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

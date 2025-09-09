@@ -19,7 +19,6 @@ interface HabitItemProps {
   onDelete: (habitId: string) => void;
 }
 
-// Helper function to check if a habit was completed today
 const isCompletedToday = (completions: { date: string }[]) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -47,10 +46,9 @@ export default function HabitItem({ habit, onHabitCompleted, onEdit, onDelete }:
       });
 
       if (res.ok) {
-        onHabitCompleted(); // Refresh the data on success
+        onHabitCompleted();
       } else {
         const data = await res.json();
-        // Don't show an alert for a 409, as it's an expected race condition
         if (res.status !== 409) {
           throw new Error(data.error || `Failed to ${action} habit`);
         }

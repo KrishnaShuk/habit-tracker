@@ -7,11 +7,10 @@ export async function POST() {
       { status: 200 }
     );
 
-    // Set the cookie with an immediate expiration date to delete it
     response.cookies.set('token', '', {
       httpOnly: true,
       secure: process.env.NODE_ENV !== 'development',
-      expires: new Date(0), // Set to a past date
+      expires: new Date(0), 
       sameSite: 'strict',
       path: '/',
     });

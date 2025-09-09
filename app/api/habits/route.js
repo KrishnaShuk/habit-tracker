@@ -1,12 +1,11 @@
 import dbConnect from '@/lib/dbConnect';
 import Habit from '@/models/Habit';
-import HabitCompletion from '@/models/HabitCompletion'; // Required for .populate() to work reliably
+import HabitCompletion from '@/models/HabitCompletion'; 
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { calculateStreak } from '@/lib/streakCalculator'; // Import the new, advanced calculator
+import { calculateStreak } from '@/lib/streakCalculator'; 
 
-// Helper function to get user ID from the token cookie
 function getUserIdFromToken() {
   const tokenCookie = cookies().get('token');
   if (!tokenCookie) {
@@ -19,10 +18,8 @@ function getUserIdFromToken() {
     return null;
   }
 }
-
-// --- GET All Habits for the Logged-in User ---
 export async function GET(request) {
-  // Opt into dynamic rendering by reading a cookie at the start
+
   cookies().get('token'); 
 
   try {
@@ -33,24 +30,19 @@ export async function GET(request) {
 
     await dbConnect();
     
-    // Fetch habits and populate their completions, sorting the completions by date descending
     const habitsFromDB = await Habit.find({ userId })
       .populate({
         path: 'completions',
         options: { sort: { date: -1 } } 
       })
       .sort({ createdAt: 'desc' });
-    
-    // Map over the results to calculate and add the current streak to each habit object
     const habitsWithStreaks = habitsFromDB.map(habit => {
-      const habitObject = habit.toObject(); // Convert Mongoose doc to a plain JS object
-      
-      // Pass both completions and the habit's frequency to the calculator
+      const habitObject = habit.toObject(); 
       const currentStreak = calculateStreak(habitObject.completions, habitObject.frequency);
       
       return {
         ...habitObject,
-        currentStreak: currentStreak, // Add the new, accurately calculated property
+        currentStreak: currentStreak, 
       };
     });
       
@@ -62,8 +54,6 @@ export async function GET(request) {
   }
 }
 
-// --- POST a New Habit for the Logged-in User ---
-// This function does not need changes for the streak calculation
 export async function POST(request) {
   cookies().get('token');
 
