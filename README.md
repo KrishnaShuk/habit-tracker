@@ -5,8 +5,6 @@ Habit Track is a modern, full-stack web application designed to help users build
 This project was built from the ground up to demonstrate proficiency in modern web development practices, including full-stack development with Next.js, database integration with MongoDB, user authentication, and containerization with Docker.
 
 
-<!-- Suggestion: Create a `screenshots` folder in your project and add a few nice images of the app, then uncomment and link to them like this. -->
-<!-- ![Login Page Screenshot](./screenshots/login.png) -->
 
 
 ## ✨ Features
