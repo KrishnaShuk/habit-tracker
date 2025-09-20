@@ -10,9 +10,7 @@ module.exports = {
         sans: ['var(--font-lexend)', 'sans-serif'],
       },
       colors: {
-        // --- THIS IS THE ONLY LINE TO CHANGE ---
-        primary: '#22C55E', // Was '#FF90E8' (pink), now is vibrant green
-        // ------------------------------------
+        primary: '#22C55E', 
         foreground: '#111111',
         background: '#FFFFFF',
         muted: '#A1A1A1',
