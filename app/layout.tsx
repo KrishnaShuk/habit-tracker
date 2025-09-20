@@ -24,10 +24,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      {/* 
-        The font's class name is applied to the body.
-        The layout structure remains identical.
-      */}
+    
       <body className={lexend.className}>
         {children}
       </body>
